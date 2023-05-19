@@ -37,16 +37,16 @@ class Player {
     console.log(`new position.... ${this.positionX}`);
   }
 
-    moveUp() {
-      this.positionY++;
-      this.domElement.style.bottom = this.positionY + "vh";
-      console.log(`new position.... ${this.positionY}`);
-    }
-    moveDown() {
-      this.positionY--;
-      this.domElement.style.bottom = this.positionY + "vh";
-      console.log(`new position.... ${this.positionY}`);
-    }
+  moveUp() {
+    this.positionY++;
+    this.domElement.style.bottom = this.positionY + "vh";
+    console.log(`new position.... ${this.positionY}`);
+  }
+  moveDown() {
+    this.positionY--;
+    this.domElement.style.bottom = this.positionY + "vh";
+    console.log(`new position.... ${this.positionY}`);
+  }
 }
 
 class Obstacle {
@@ -92,8 +92,10 @@ setInterval(() => {
 // Move all obstacles
 setInterval(() => {
   obstaclesArr.forEach((obstacleInstance) => {
+    // Move current obstacle
     obstacleInstance.moveDown();
 
+    // Detect collision
     if (
       obstacleInstance.positionX < player.positionX + player.width &&
       obstacleInstance.positionX + obstacleInstance.width > player.positionX &&
@@ -102,6 +104,15 @@ setInterval(() => {
     ) {
       console.log("game over my fren");
       location.href = "./gameover.html";
+    }
+
+    // Detect if obstacle needs to be removed
+    if (obstacleInstance.positionY < 0 - obstacleInstance.height) {
+      //1. remove elm from the dom
+      obstacleInstance.domElement.remove();
+
+      //2. remove from the array of obstacles
+      obstaclesArr.shift(); //remove from the array
     }
   });
 }, 60);
@@ -112,9 +123,9 @@ document.addEventListener("keydown", (event) => {
     player.moveLeft();
   } else if (event.code === "ArrowRight") {
     player.moveRight();
-      } else if (event.code === "ArrowUp") {
-        player.moveUp()
-      } else if (event.code === "ArrowDown") {
-        player.moveDown()
+  } else if (event.code === "ArrowUp") {
+    player.moveUp();
+  } else if (event.code === "ArrowDown") {
+    player.moveDown();
   }
 });
